@@ -265,8 +265,9 @@ describe('Conditionals', function () {
     done()
   })
 
-  it('should ignore \'if-\' when not part of an if statement when \'if-\' is part of an attribute\'s value', function (done) {
-    assert.equalIgnoreSpaces(teddy.render('conditionals/oneLineIfInsideAttribute.html', model), '<p id=\'gif-jpg-png\'>hello</p> <p class=\'gif-jpg-png\'>hello</p><p filter=\'gif-jpg-png\'>hello</p>')
+  it.only('should ignore \'if-\' when not part of an if statement when \'if-\' is part of an attribute\'s value', function (done) {
+    // assert.equalIgnoreSpaces(teddy.render('conditionals/oneLineIfInsideAttribute.html', model), '<p id=\'gif-jpg-png\'>hello</p> <p class=\'gif-jpg-png\'>hello</p><p some-random-attr=\'g if-jpg-png\'>hello</p>')
+    assert.equalIgnoreSpaces(teddy.render('conditionals/oneLineIfInsideAttribute.html', model), '<p some-random-attr=\'g if-jpg-png\'>hello</p>')
     done()
   })
 

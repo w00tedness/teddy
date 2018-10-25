@@ -700,18 +700,31 @@
         while (loopTypesLeft)
 
         // do one line ifs now...
-        if (renderedTemplate.indexOf('if-') > -1) {
+        // if the 'if-' is within quotes (an attribute's value) then ignore it
+        // if (/[^']*?\sif-[^']+/.test(renderedTemplate)) {
+        //   return renderedTemplate
+        // }
+        // console.log(renderedTemplate)
+        // console.log(!/[^']*?\sif-[^']+/.test(renderedTemplate))
+        if (/\sif-/.test(renderedTemplate)) {
           recursedOnelines = matchRecursive(renderedTemplate, '<...>')
+          // console.log(recursedOnelines)
           recursedLength = recursedOnelines.length
           // iterate over recursed match(es)
           for (recursedCount = 0; recursedCount < recursedLength; recursedCount++) {
             if (recursedOnelines[recursedCount].indexOf('if-') > -1) {
+            // if (!/[^']*?\sif-[^']+/.test(recursedOnelines[recursedCount])) {
+              // console.log('string: ', recursedOnelines[recursedCount])
+              // console.log('boolean from .test: ', /[^']*?\sif-[^']+/.test(recursedOnelines[recursedCount]))
               onelines = recursedOnelines[recursedCount].match(/[^<]*?if-[^>]+/g)
+              // console.log(onelines)
               l = onelines ? onelines.length : 0
+              // console.log(l)
 
               // iterate over stable match within the recursed match
               for (i = 0; i < l; i++) {
                 el = '<' + onelines[i] + '>'
+                // console.log(el)
                 model = applyLocalModel(el, model)
                 result = renderOneLineConditional(el, model)
                 renderedTemplate = replaceNonRegex(renderedTemplate, el, result)
@@ -1054,7 +1067,7 @@
       // determines if a condition is true for <if>, <unless>, <elseif>, and <elseunless>, and one-liners
       function evalCondition (el, model) {
         el = el.trim()
-
+        // console.log('evalCondition: ', el)
         var conditionType
         var attrCount = 0
         var conditionAttr
@@ -1083,14 +1096,18 @@
           conditionType = 'onelineif'
           for (i = 0; i < length; i++) {
             conditionAttr = attributes[i].split('=')
+            console.log(conditionAttr)
             if (conditionAttr[0].substr(0, 3) === 'if-') {
               conditionVal = conditionAttr[1]
+              console.log(conditionVal)
               if (conditionVal) {
                 conditionVal = conditionVal.substring(1, conditionVal.length - 1)
                 conditionVal = parseVars(conditionVal, model)
               }
               conditionAttr = replaceNonRegex(attributes[i], 'if-', '')
               break
+            } else if () {
+
             }
           }
           return evalStatement()
@@ -1113,6 +1130,7 @@
         while (notDone)
 
         function evalStatement () {
+          // console.log('evalStatement: ', conditionAttr)
           conditionAttr = conditionAttr.split('=')
           condition = conditionAttr[0]
 
